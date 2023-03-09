@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <p>Enter number between (0,10)</p> -->
+    <label for="num">Enter number:</label>
+    <input type="number" name="num" id="num1" required>
+    <script>
+         let val=document.getElementById("num1");
+         let node=val.parentNode;
+         let para=document.createElement('p');
+         let bool=false;
+         val.addEventListener('keydown',(e)=>{
+            if(e.key=='Enter'){
+                if(bool){
+                    let childNodes=node.childNodes;
+                    let toRemove=[];
+                    for (let i = 0; i < childNodes.length; i++) {
+                      const node = childNodes[i];
+                      if(node.className=='box'){
+                        toRemove.push(childNodes[i]);
+                      }
+                    }
+                    toRemove.forEach(element => {
+                        element.remove();
+                    });
+                }
+                let n=val.value;
+                if(n>20 || n<0){
+                    console.log("Error");
+                    para.innerText="The value should be in range [0,20] only";
+                    para.style.color="red";
+                    node.append(para);
+                    setTimeout(() => {
+                        para.remove();
+                    }, 2000);
+                }else{
+                    bool=true;
+                    let idArray=[];
+                    para.innerText=`N=${n}`;
+                    para.style.color="green";
+                    node.append(para);
+                    let ids=0;
+                    for(let i=0;i<n;i++){
+                        let newNode=val.parentNode;
+                        let newDiv=document.createElement("div");
+                        newDiv.className='box';
+                      for(let j=0;j<n;j++){
+                        let box=document.createElement("div");
+                        box.id=`${i},${j}`;
+                        idArray.push(`${i},${j}`);
+                        box.style.height="30px";
+                        box.style.width="30px";
+                        box.style.border="solid black 1px";
+                        box.style.marginRight="2px";
+                        box.style.display="inline-block";
+                        box.style.cursor="pointer";
+                        newDiv.append(box);
+                        ids++;
+                      }
+                      newNode.append(newDiv);
+                    }
+
+                    idArray.forEach(element => {
+                        let box=document.getElementById(element);
+                        box.addEventListener('click',(e)=>{
+                            if(box.style.backgroundColor=='red'){
+                                box.style.backgroundColor="white";
+                            }else{
+                               box.style.backgroundColor="red";
+                            }
+                        });
+                    });
+                    
+                    
+                    let findpath=document.createElement("button");
+                    findpath.innerText="Click to find path";
+                    findpath.className='box';
+                    findpath.style.backgroundColor="blue";
+                    findpath.style.padding="10px";
+                    findpath.style.color="white";
+                    findpath.id="findP";
+                    findpath.style.cursor="pointer";
+                    node.append(findpath);
+                    
+                    let sol=document.getElementById("findP");
+                    sol.addEventListener('click',(e)=>{
+                        const vis = [];
+                        for (let i = 0; i < n; i++){
+                            vis[i] = [];
+                            for (let j = 0; j < n; j++) {
+                                vis[i][j] = 0;
+                                let get=document.getElementById(`${i},${j}`);
+                                if(get.style.backgroundColor!='red'){
+                                    get.style.backgroundColor='white';
+                                }
+                            }
+                        }
+                        
+                        let dir=[0,1,0,-1,0];
+                        // vis[0][0]=1;
+                        let color=['green','pink','skyblue','orange','royalblue','Violet','MediumSeaGreen','Gray','SlateBlue','sienna','olive','goldenrod','paleturquoise',
+                             'rebeccapurple','burlywood','yellowgreen'];
+                        let cidx=0;
+                        function dfs(i,j) {
+                            if(i==n-1 && j==n-1){
+                                console.log("yes");
+                                  return true;
+                            }
+                            // setTimeout(() => {
+                            for(let k=0;k<4;k++){
+                                let x=i+dir[k];
+                                let y=j+dir[k+1];
+                                if(x>=0 && y>=0 && x<n && y<n && !vis[x][y]){
+                                    let cc=document.getElementById(`${x},${y}`);
+                                    if(cc.style.backgroundColor!='red'){
+                                        vis[x][y]=1;
+                                         setTimeout(()=>{
+                                           cc.style.backgroundColor='green';
+                                           console.log("code is Executing");
+                                         },200);
+
+                                         let is=false;
+                                            is=dfs(x,y);
+                                         if(is){
+                                            return true;
+                                          }
+                                        setTimeout(()=>{
+                                           cc.style.backgroundColor='orange';
+                                           console.log("backtracking");
+                                         },200);
+                                        
+                                    }
+
+                                }
+                            }
+                            return false;
+                        // }, 500);
+                        }
+                        dfs(-1,0);
+                    })
+                }
+            }
+         });
+    </script>
+      
+</body>
+</html>
