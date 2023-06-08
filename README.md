@@ -1,3 +1,3 @@
 # BackTracking
-just a simple backtracking 
+A simple backtracking visualization 
 https://backtracking-547ac.web.app/
